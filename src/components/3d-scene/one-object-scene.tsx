@@ -128,15 +128,15 @@ export default function OneObjectScene(props:Props){
 
         
     return (
-        <div className='flex w-screen items-center flex-col text-4xl'>
+        <div className='flex w-screen items-center flex-col text-[20px] text-white'>
             {
                 loadedModel && loadedModel.animations.length > 0 && (
                     <div>
                         {
                             loadedModel.animations.map((animation, index) => (
                                 <button 
-                                className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'
-                                    key={index} 
+                                className=' bg-neutral-800 rounded-full m-[12px] px-[20px] py-[8px] hover:bg-neutral-700 active:bg-neutral-600'
+                                key={index} 
                                     onClick={()=>{handleAnimationPlay(index)}}
                                     >
                                     {animation.name || `Animation ${index + 1}`}
@@ -156,12 +156,12 @@ export default function OneObjectScene(props:Props){
                             }
                         }
                     }}
-                    className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'
+                    className=' bg-neutral-800 rounded-full m-[12px] px-[20px] py-[8px] hover:bg-neutral-700 active:bg-neutral-600'
                     >Once</button>
 
                 <button
                     onClick={()=>{setInfinitelyAnimate(true)}}
-                    className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'
+                    className=' bg-neutral-800 rounded-full m-[12px] px-[20px] py-[8px] hover:bg-neutral-700 active:bg-neutral-600'
                     >Infinite</button>
 
                 <button
@@ -189,7 +189,7 @@ export default function OneObjectScene(props:Props){
                             });
                         }
                     }}
-                    className='bg-red-800 rounded-full m-3 px-5 py-2 hover:bg-red-700 active:bg-red-600'
+                    className=' bg-neutral-800 rounded-full m-[12px] px-[20px] py-[8px] hover:bg-neutral-700 active:bg-neutral-600'
                 >
                     Dissolve by Vertices
                 </button>
@@ -208,7 +208,7 @@ export default function OneObjectScene(props:Props){
                             });
                         }
                     }}
-                    className='bg-blue-800 rounded-full m-3 px-5 py-2 hover:bg-blue-700 active:bg-blue-600'
+                    className=' bg-neutral-800 rounded-full m-[12px] px-[20px] py-[8px] hover:bg-neutral-700 active:bg-neutral-600'
                 >
                     Recolor Model
                 </button>
