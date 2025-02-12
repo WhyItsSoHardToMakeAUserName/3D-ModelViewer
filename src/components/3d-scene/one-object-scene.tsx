@@ -10,7 +10,7 @@ type Props = {
 
 export default function OneObjectScene(props:Props){
     const [currentAnimationIndex, setCurrentAnimationIndex] = useState<number|null>(null);
-    const [infinitelyAnimate,setInfinitelyAnimate] = useState(false)
+    const [infinitelyAnimate,setInfinitelyAnimate] = useState(true)
     const [loadedModel,setLoadedModel] = useState<GLTF|null>(null);
 
     const [scene] = useState(new THREE.Scene());
@@ -156,11 +156,63 @@ export default function OneObjectScene(props:Props){
                             }
                         }
                     }}
-                    className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'                >once</button>
+                    className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'
+                    >Once</button>
 
                 <button
                     onClick={()=>{setInfinitelyAnimate(true)}}
-                    className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'                >infinite</button>
+                    className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'
+                    >Infinite</button>
+
+                <button
+                    onClick={() => {
+                        if (loadedModel) {
+                            loadedModel.scene.traverse((child) => {
+                                if (child instanceof THREE.Mesh) {
+                                    if (child.geometry && child.geometry instanceof THREE.BufferGeometry) {
+                                        const positionAttr = child.geometry.attributes.position;
+                                        const totalVertices = positionAttr.count;
+                                        let currentVertexCount = totalVertices;
+                                        
+                                        const interval = setInterval(() => {
+                                            if (currentVertexCount > 0) {
+                                                currentVertexCount -= 3;
+                                                
+                                                child.geometry.setDrawRange(0, currentVertexCount);
+                                                child.geometry.attributes.position.needsUpdate = true;
+                                            } else {
+                                                clearInterval(interval);
+                                            }
+                                        }, 100);
+                                    }
+                                }
+                            });
+                        }
+                    }}
+                    className='bg-red-800 rounded-full m-3 px-5 py-2 hover:bg-red-700 active:bg-red-600'
+                >
+                    Dissolve by Vertices
+                </button>
+
+                <button
+                    onClick={() => {
+                        if (loadedModel) {
+                            loadedModel.scene.traverse((child) => {
+                                if (child instanceof THREE.Mesh) {
+                                    if (child.material) {
+                                        const randomColor = new THREE.Color(Math.random(), Math.random(), Math.random());
+                                        child.material.color.set(randomColor);
+                                        child.material.needsUpdate = true;
+                                    }
+                                }
+                            });
+                        }
+                    }}
+                    className='bg-blue-800 rounded-full m-3 px-5 py-2 hover:bg-blue-700 active:bg-blue-600'
+                >
+                    Recolor Model
+                </button>
+
             </div>
 
             <div ref={containerRef} className='absolute top-0 -z-10'>
