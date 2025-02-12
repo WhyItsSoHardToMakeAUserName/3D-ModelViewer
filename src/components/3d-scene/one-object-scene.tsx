@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 import { GLTF, GLTFLoader, OrbitControls } from 'three/examples/jsm/Addons.js';
 
@@ -23,6 +23,8 @@ export default function OneObjectScene(props:Props){
     ));
     const [animationMixer,setAnimationMixer] = useState<THREE.AnimationMixer|null>(null)
     
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
     const loader = new GLTFLoader();
     
     useEffect(()=>{
@@ -35,7 +37,14 @@ export default function OneObjectScene(props:Props){
         scene.add( light );    
 
         renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement)
+        window.addEventListener('resize',function(){
+            camera.aspect = window.innerWidth/ window.innerHeight
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        })
+        if(containerRef.current){
+            containerRef.current.appendChild(renderer.domElement);
+        }
 
         const controls = new OrbitControls( camera, renderer.domElement );
         controls.autoRotate = false;
@@ -119,15 +128,14 @@ export default function OneObjectScene(props:Props){
 
         
     return (
-        <div>
+        <div className='flex w-screen items-center flex-col text-4xl'>
             {
                 loadedModel && loadedModel.animations.length > 0 && (
                     <div>
-                        <h3>Available Animations:</h3>
                         {
                             loadedModel.animations.map((animation, index) => (
                                 <button 
-                                className='bg-slate-400 text-4xl rounded-full m-3 px-3 hover:bg-slate-600'
+                                className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'
                                     key={index} 
                                     onClick={()=>{handleAnimationPlay(index)}}
                                     >
@@ -139,8 +147,17 @@ export default function OneObjectScene(props:Props){
                 )
             }
             <div>
-                <button onClick={()=>{setInfinitelyAnimate(false)}}>once</button>
-                <button onClick={()=>{setInfinitelyAnimate(true)}}>infinite</button>
+                <button 
+                    onClick={()=>{setInfinitelyAnimate(false)}}
+                    className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'                >once</button>
+
+                <button
+                    onClick={()=>{setInfinitelyAnimate(true)}}
+                    className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'                >infinite</button>
+            </div>
+
+            <div ref={containerRef} className='absolute top-0 -z-10'>
+
             </div>
         </div>
     );
