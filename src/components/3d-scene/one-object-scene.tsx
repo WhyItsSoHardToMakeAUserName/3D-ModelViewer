@@ -148,7 +148,14 @@ export default function OneObjectScene(props:Props){
             }
             <div>
                 <button 
-                    onClick={()=>{setInfinitelyAnimate(false)}}
+                    onClick={()=>{
+                        setInfinitelyAnimate(false)
+                        if(infinitelyAnimate == false){
+                            if (currentAnimationIndex !== null) {
+                                handleAnimationPlay(currentAnimationIndex);
+                            }
+                        }
+                    }}
                     className='bg-neutral-800 rounded-full m-3 px-5 py-2 hover:bg-neutral-700 active:bg-neutral-600'                >once</button>
 
                 <button
